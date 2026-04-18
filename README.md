@@ -18,6 +18,3 @@ Android application that helps students track their academic progress toward gra
 - **Data Layer (Room Database)**
   - Uses SQLite via Room Persistence Library
   - Stores Courses and Assignments data
-
-## 🔄 Data Flow
-
