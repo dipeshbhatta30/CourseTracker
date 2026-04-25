@@ -13,6 +13,15 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/tvCourseCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CS101"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#4B5563" />
+
+        <TextView
             android:id="@+id/tvCourseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

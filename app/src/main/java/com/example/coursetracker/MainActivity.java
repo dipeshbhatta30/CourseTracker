@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Default screen
         loadFragment(new HomeFragment());
-
+        // loadFragment(new CoursesFragment());
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
