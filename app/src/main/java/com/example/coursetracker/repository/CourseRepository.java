@@ -1,36 +1,34 @@
 package com.example.coursetracker.repository;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
+import com.example.coursetracker.database.AppDatabase;
+import com.example.coursetracker.database.CourseDao;
 import com.example.coursetracker.model.Course;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository {
+    private final CourseDao courseDao;
+    private final LiveData<List<Course>> allCourses;
 
-    private static CourseRepository instance;
-    private final MutableLiveData<List<Course>> coursesLiveData = new MutableLiveData<>();
-
-    private CourseRepository() {
-        List<Course> courseList = new ArrayList<>();
-
-        courseList.add(new Course("CS443", "Software Testing", "Professor", 85));
-        courseList.add(new Course("CS483", "Big Data", "Professor", 75));
-        courseList.add(new Course("CS401", "Android", "Professor", 60));
-
-        coursesLiveData.setValue(courseList);
+    public CourseRepository(Application application) {
+        AppDatabase db = AppDatabase.getInstance(application);
+        courseDao = db.courseDao();
+        allCourses = courseDao.getAllCourses();
     }
 
-    public static CourseRepository getInstance() {
-        if (instance == null) {
-            instance = new CourseRepository();
-        }
-        return instance;
+    public LiveData<List<Course>> getAllCourses() {
+        return allCourses;
     }
 
-    public LiveData<List<Course>> getCourses() {
-        return coursesLiveData;
+    public void insert(Course course) {
+        new Thread(() -> courseDao.insert(course)).start();
+    }
+
+    public LiveData<List<Course>> searchCourses(String query) {
+        return courseDao.searchCourses(query);
     }
 }

@@ -49,6 +49,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
+            courseCode = itemView.findViewById(R.id.tvCourseCode);
             courseName = itemView.findViewById(R.id.tvCourseName);
             instructor = itemView.findViewById(R.id.tvInstructor);
             progressBar = itemView.findViewById(R.id.progressCourse);

@@ -45,6 +45,12 @@
             android:layout_marginStart="8dp"
             android:text="Completed" />
     </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Course"
+        android:layout_marginTop="12dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCourses"
         android:layout_width="match_parent"
