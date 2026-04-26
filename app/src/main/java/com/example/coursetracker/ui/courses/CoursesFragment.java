@@ -130,6 +130,15 @@ public class CoursesFragment extends Fragment {
             progressInput.setInputType(InputType.TYPE_CLASS_NUMBER);
             container.addView(progressInput);
 
+            EditText creditsInput = new EditText(requireContext());
+            creditsInput.setHint("Credits");
+            creditsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+            container.addView(creditsInput);
+
+            EditText letterGradeInput = new EditText(requireContext());
+            letterGradeInput.setHint("Letter grade (A, B+, C...)");
+            container.addView(letterGradeInput);
+
             builder.setView(container);
 
             builder.setPositiveButton("Add", (dialog, which) -> {
@@ -137,6 +146,8 @@ public class CoursesFragment extends Fragment {
                 String courseName = courseNameInput.getText().toString().trim();
                 String instructor = instructorInput.getText().toString().trim();
                 String progressText = progressInput.getText().toString().trim();
+                String creditsText = creditsInput.getText().toString().trim();
+                String letterGrade = letterGradeInput.getText().toString().trim().toUpperCase(Locale.US);
 
                 if (courseCode.isEmpty() || courseName.isEmpty() || instructor.isEmpty()) {
                     return;
@@ -152,12 +163,29 @@ public class CoursesFragment extends Fragment {
                 }
                 progressValue = Math.max(0, Math.min(100, progressValue));
 
+                int creditsValue = 3;
+                if (!creditsText.isEmpty()) {
+                    try {
+                        creditsValue = Integer.parseInt(creditsText);
+                    } catch (NumberFormatException ignored) {
+                        creditsValue = 3;
+                    }
+                }
+                if (creditsValue <= 0) {
+                    creditsValue = 3;
+                }
+                if (letterGrade.isEmpty()) {
+                    letterGrade = "N/A";
+                }
+
                 courseViewModel.insert(
                         new Course(
                                 courseCode,
                                 courseName,
                                 instructor,
-                                progressValue
+                                progressValue,
+                                creditsValue,
+                                letterGrade
                         )
                 );
             });
@@ -203,7 +231,8 @@ public class CoursesFragment extends Fragment {
             boolean matchesSearch = normalizedQuery.isEmpty()
                     || course.getCourseName().toLowerCase(Locale.US).contains(normalizedQuery)
                     || course.getCourseCode().toLowerCase(Locale.US).contains(normalizedQuery)
-                    || course.getInstructor().toLowerCase(Locale.US).contains(normalizedQuery);
+                    || course.getInstructor().toLowerCase(Locale.US).contains(normalizedQuery)
+                    || course.getLetterGrade().toLowerCase(Locale.US).contains(normalizedQuery);
 
             if (matchesFilter && matchesSearch) {
                 filteredCourses.add(course);
@@ -249,6 +278,17 @@ public class CoursesFragment extends Fragment {
         progressInput.setText(String.valueOf(course.getProgress()));
         container.addView(progressInput);
 
+        EditText creditsInput = new EditText(requireContext());
+        creditsInput.setHint("Credits");
+        creditsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        creditsInput.setText(String.valueOf(course.getCredits()));
+        container.addView(creditsInput);
+
+        EditText letterGradeInput = new EditText(requireContext());
+        letterGradeInput.setHint("Letter grade (A, B+, C...)");
+        letterGradeInput.setText(course.getLetterGrade());
+        container.addView(letterGradeInput);
+
         builder.setView(container);
 
         builder.setPositiveButton("Save", (dialog, which) -> {
@@ -256,6 +296,8 @@ public class CoursesFragment extends Fragment {
             String courseName = courseNameInput.getText().toString().trim();
             String instructor = instructorInput.getText().toString().trim();
             String progressText = progressInput.getText().toString().trim();
+            String creditsText = creditsInput.getText().toString().trim();
+            String letterGrade = letterGradeInput.getText().toString().trim().toUpperCase(Locale.US);
 
             if (courseCode.isEmpty() || courseName.isEmpty() || instructor.isEmpty()) {
                 return;
@@ -271,11 +313,28 @@ public class CoursesFragment extends Fragment {
             }
             progressValue = Math.max(0, Math.min(100, progressValue));
 
+            int creditsValue = course.getCredits();
+            if (!creditsText.isEmpty()) {
+                try {
+                    creditsValue = Integer.parseInt(creditsText);
+                } catch (NumberFormatException ignored) {
+                    creditsValue = course.getCredits();
+                }
+            }
+            if (creditsValue <= 0) {
+                creditsValue = course.getCredits();
+            }
+            if (letterGrade.isEmpty()) {
+                letterGrade = "N/A";
+            }
+
             Course updatedCourse = new Course(
                     courseCode,
                     courseName,
                     instructor,
-                    progressValue
+                    progressValue,
+                    creditsValue,
+                    letterGrade
             );
             updatedCourse.setId(course.getId());
             courseViewModel.update(updatedCourse);

@@ -43,7 +43,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         holder.courseCode.setText(course.getCourseCode());
         holder.courseName.setText(course.getCourseName());
-        holder.instructor.setText(course.getInstructor());
+        holder.instructor.setText(course.getInstructor() + " • " + course.getCredits() + " Credits • " + course.getLetterGrade());
         holder.progressBar.setProgress(course.getProgress());
         holder.progressText.setText(course.getProgress() + "% Complete");
         holder.editButton.setOnClickListener(v -> {
