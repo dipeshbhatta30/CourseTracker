@@ -28,6 +28,18 @@ public class CourseRepository {
         new Thread(() -> courseDao.insert(course)).start();
     }
 
+    public void update(Course course) {
+        new Thread(() -> courseDao.update(course)).start();
+    }
+
+    public void deleteById(int courseId) {
+        new Thread(() -> courseDao.deleteById(courseId)).start();
+    }
+
+    public void deleteAll() {
+        new Thread(courseDao::deleteAll).start();
+    }
+
     public LiveData<List<Course>> searchCourses(String query) {
         return courseDao.searchCourses(query);
     }

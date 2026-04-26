@@ -30,6 +30,18 @@ public class CourseViewModel extends AndroidViewModel {
         repository.insert(course);
     }
 
+    public void update(Course course) {
+        repository.update(course);
+    }
+
+    public void deleteById(int courseId) {
+        repository.deleteById(courseId);
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
     public LiveData<List<Course>> searchCourses(String query) {
         return repository.searchCourses(query);
     }
