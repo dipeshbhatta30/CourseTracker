@@ -8,9 +8,10 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.coursetracker.model.CalendarTask;
 import com.example.coursetracker.model.Course;
 
-@Database(entities = {Course.class}, version = 2)
+@Database(entities = {Course.class, CalendarTask.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -21,8 +22,15 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE courses ADD COLUMN letterGrade TEXT DEFAULT 'N/A'");
         }
     };
+    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `calendar_tasks` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `status` TEXT, `taskDate` TEXT)");
+        }
+    };
 
     public abstract CourseDao courseDao();
+    public abstract TaskDao taskDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {
@@ -32,6 +40,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             "course_db"
                     )
                     .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_2_3)
                     .build();
         }
         return instance;
